@@ -38,6 +38,7 @@
                     <div class="android-navigation-container">
                         <nav class="android-navigation mdl-navigation">
                             <a class="mdl-navigation__link mdl-typography--text-uppercase" href="users/list">Users</a>
+							<a class="mdl-navigation__link mdl-typography--text-uppercase" href="users/list">Logout</a>
                         </nav>
                     </div>
                 </div>
