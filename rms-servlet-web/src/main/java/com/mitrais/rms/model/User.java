@@ -12,7 +12,15 @@ public class User {
         this.password = password;
     }
 
-    public Long getId() {
+    public User() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Long getId() {
         return id;
     }
 
