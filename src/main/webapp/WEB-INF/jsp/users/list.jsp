@@ -2,6 +2,7 @@
 <div class="android-content mdl-layout__content">
     <div align="center">
         <a href="form?id=null&act=add">Add User</a><br/>
+        ${msg}
         <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp ">
             <thead>
                 <tr> 

@@ -20,31 +20,42 @@ public class UserServlet extends AbstractController {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = getTemplatePath(req.getServletPath() + req.getPathInfo());
 		String act = req.getParameter("act");
+
 		try {
 			if ("/list".equalsIgnoreCase(req.getPathInfo())) {
 				UserDao userDao = UserDaoImpl.getInstance();
 				List<User> users = userDao.findAll();
 				req.setAttribute("users", users);
 			}
-			if (act.equalsIgnoreCase("edit")) {
-				String idTemp = req.getParameter("id");
-				UserDao userDao = UserDaoImpl.getInstance();
-				Optional<User> users = userDao.find(Long.parseLong(idTemp));
-				User user = users.get();
-				req.setAttribute("users", user);
+			
+			String idTemp = req.getParameter("id");
+			if (idTemp == null) {
+				idTemp = req.getParameter("id");
+				String errMsg = "Id not found";
+				req.setAttribute("msg", errMsg);
+
+			} else {
+
+				if ("edit".equalsIgnoreCase(act)) {
+					UserDao userDao = UserDaoImpl.getInstance();
+					Optional<User> users = userDao.find(Long.parseLong(idTemp));
+					User user = users.get();
+					req.setAttribute("users", user);
+				}
+				if ("del".equalsIgnoreCase(act)) {
+					UserDao userDao = UserDaoImpl.getInstance();
+					Optional<User> users = userDao.find(Long.parseLong(idTemp));
+					User user = users.get();
+					userDao.delete(user);
+					List<User> userList = userDao.findAll();
+					req.setAttribute("users", userList);
+				}
 			}
-			if (act.equalsIgnoreCase("del")) {
-				String idTemp = req.getParameter("id");
-				UserDao userDao = UserDaoImpl.getInstance();
-				Optional<User> users = userDao.find(Long.parseLong(idTemp));
-				User user = users.get();
-				userDao.delete(user);
-				List<User> userList = userDao.findAll();
-				req.setAttribute("users", userList);
-			}
+
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);
 		requestDispatcher.forward(req, resp);
 	}
