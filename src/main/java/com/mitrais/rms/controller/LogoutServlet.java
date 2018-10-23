@@ -19,11 +19,11 @@ import javax.servlet.http.HttpSession;
 @WebServlet("/logout")
 public class LogoutServlet {
 
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
-    }
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		HttpSession session = req.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
+		req.getRequestDispatcher("/index.jsp").forward(req, resp);
+	}
 }

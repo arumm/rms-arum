@@ -10,38 +10,32 @@ import java.io.IOException;
 /**
  *
  */
-public class Link extends SimpleTagSupport
-{
-    private String href;
-    private String type;
+public class Link extends SimpleTagSupport {
+	private String href;
+	private String type;
 
-    @Override
-    public void doTag() throws JspException, IOException
-    {
-        PageContext pageContext = (PageContext) getJspContext();
-        HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
-        String relLink = request.getContextPath()+ "/" + this.href;
-        JspWriter out = getJspContext().getOut();
-        out.println("<link rel=\""+type+"\" href=\""+relLink+"\">");
-    }
+	@Override
+	public void doTag() throws JspException, IOException {
+		PageContext pageContext = (PageContext) getJspContext();
+		HttpServletRequest request = (HttpServletRequest) pageContext.getRequest();
+		String relLink = request.getContextPath() + "/" + this.href;
+		JspWriter out = getJspContext().getOut();
+		out.println("<link rel=\"" + type + "\" href=\"" + relLink + "\">");
+	}
 
-    public String getHref()
-    {
-        return href;
-    }
+	public String getHref() {
+		return href;
+	}
 
-    public void setHref(String href)
-    {
-        this.href = href;
-    }
+	public void setHref(String href) {
+		this.href = href;
+	}
 
-    public String getType()
-    {
-        return type;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setType(String type)
-    {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 }
