@@ -19,43 +19,48 @@ public class UserServlet extends AbstractController {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String path = getTemplatePath(req.getServletPath() + req.getPathInfo());
-		String act = req.getParameter("act");
-
 		try {
+			UserDao userDao = UserDaoImpl.getInstance();
 			if ("/list".equalsIgnoreCase(req.getPathInfo())) {
-				UserDao userDao = UserDaoImpl.getInstance();
 				List<User> users = userDao.findAll();
 				req.setAttribute("users", users);
-			}
-			
-			String idTemp = req.getParameter("id");
-			if (idTemp == null) {
-				idTemp = req.getParameter("id");
-				String errMsg = "Id not found";
-				req.setAttribute("msg", errMsg);
-
-			} else {
-
-				if ("edit".equalsIgnoreCase(act)) {
-					UserDao userDao = UserDaoImpl.getInstance();
-					Optional<User> users = userDao.find(Long.parseLong(idTemp));
-					User user = users.get();
-					req.setAttribute("users", user);
+			} else if ("/add".equalsIgnoreCase(req.getPathInfo())) {
+				path = getTemplatePath(req.getServletPath() + "/form");
+			} else if ("/edit".equalsIgnoreCase(req.getPathInfo())) {
+				String idTemp = req.getParameter("id");
+				if (idTemp == null || idTemp == "") {
+					String errMsg = "Id not found";
+					req.setAttribute("msg", errMsg);
+					List<User> users = userDao.findAll();
+					req.setAttribute("users", users);
+					path = getTemplatePath(req.getServletPath() + "/list");
+				} else {
+					Optional<User> userEdit = userDao.find(Long.parseLong(idTemp));
+					if (userEdit.isPresent()) {
+						User user = userEdit.get();
+						req.setAttribute("users", user);
+					}
+					path = getTemplatePath(req.getServletPath() + "/form");
 				}
-				if ("del".equalsIgnoreCase(act)) {
-					UserDao userDao = UserDaoImpl.getInstance();
-					Optional<User> users = userDao.find(Long.parseLong(idTemp));
-					User user = users.get();
-					userDao.delete(user);
-					List<User> userList = userDao.findAll();
-					req.setAttribute("users", userList);
+			} else if ("/del".equalsIgnoreCase(req.getPathInfo())) {
+				String idTemp = req.getParameter("id");
+				if (idTemp == null || idTemp == "") {
+					String errMsg = "Id not found";
+					req.setAttribute("msg", errMsg);
+				} else {
+					Optional<User> userDel = userDao.find(Long.parseLong(idTemp));
+					if (userDel.isPresent()) {
+						User user = userDel.get();
+						userDao.delete(user);
+					}
 				}
+				List<User> userList = userDao.findAll();
+				req.setAttribute("users", userList);
+				path = getTemplatePath(req.getServletPath() + "/list");
 			}
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);
 		requestDispatcher.forward(req, resp);
 	}
